@@ -1,0 +1,15 @@
+{
+  "name": "Busca CEP Paraíba",
+  "short_name": "CEP PB",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#3498db",
+  "theme_color": "#3498db",
+  "icons": [
+    {
+      "src": "icon_cep.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

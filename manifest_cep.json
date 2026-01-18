@@ -1,11 +1,17 @@
 {
-  "name": "Busca CEP Paraíba",
-  "short_name": "CEP PB",
-  "start_url": "index.html",
+  "name": "Busca CEP PB",
+  "short_name": "CEP-PB",
+  "description": "Busca de CEP e Logradouros na Paraíba",
+  "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#3498db",
+  "background_color": "#ffffff",
   "theme_color": "#3498db",
   "icons": [
+    {
+      "src": "icon_cep.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
     {
       "src": "icon_cep.png",
       "sizes": "512x512",

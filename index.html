@@ -30,6 +30,21 @@ body{
   overflow:auto;
 }
 h2{text-align:center;margin:0 0 16px;font-weight:800}
+
+/* Botão de Instalação PWA */
+#installBtn {
+  display: none; /* Escondido por padrão */
+  width: 100%;
+  background: #f39c12;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  cursor: pointer;
+}
+
 .tabs{display:flex;gap:6px;margin-bottom:14px}
 .tab{
   flex:1;
@@ -49,7 +64,7 @@ input{
   margin-bottom:8px;
   border-radius:10px;
   border:1px solid #ccc;
-  font-size: 16px; /* Evita zoom no iPhone */
+  font-size: 16px;
 }
 .btns{display:flex;gap:8px;margin-top:6px;flex-wrap:wrap}
 button{
@@ -81,6 +96,8 @@ button.secondary{background:#2ecc71}
 <div class="form-container">
 <h2>BUSCA POR CEP - PB</h2>
 
+<button id="installBtn">📲 INSTALAR APLICATIVO</button>
+
 <div class="tabs">
   <div class="tab active" onclick="showTab('cep')">Busca por CEP</div>
   <div class="tab" onclick="showTab('logradouro')">Busca por Logradouro</div>
@@ -107,7 +124,34 @@ button.secondary{background:#2ecc71}
 </div>
 
 <script>
-// --- REGISTRO DO SERVICE WORKER (PWA) ---
+// --- LÓGICA DE INSTALAÇÃO PWA ---
+let deferredPrompt;
+const installBtn = document.getElementById('installBtn');
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  installBtn.style.display = 'block'; // Mostra o botão se puder instalar
+});
+
+installBtn.addEventListener('click', async () => {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === 'accepted') {
+      console.log('Usuário aceitou a instalação');
+    }
+    deferredPrompt = null;
+    installBtn.style.display = 'none';
+  }
+});
+
+window.addEventListener('appinstalled', () => {
+  installBtn.style.display = 'none';
+  console.log('PWA instalado com sucesso');
+});
+
+// --- REGISTRO DO SERVICE WORKER ---
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw_cep.js')
     .then(() => console.log("PWA CEP: Ativo"))

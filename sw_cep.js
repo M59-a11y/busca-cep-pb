@@ -1,23 +1,21 @@
-const cacheName = 'cep-pb-v1';
-const assets = [
+const CACHE_NAME = 'cep-pb-v1';
+const ASSETS = [
   './',
   './index.html',
   './manifest_cep.json',
   './icon_cep.png'
 ];
 
-self.addEventListener('install', e => {
+// Instalação e Cache
+self.addEventListener('install', (e) => {
   e.waitUntil(
-    caches.open(cacheName).then(cache => {
-      return cache.addAll(assets);
-    })
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS))
   );
 });
 
-self.addEventListener('fetch', e => {
+// Responde offline
+self.addEventListener('fetch', (e) => {
   e.respondWith(
-    caches.match(e.request).then(res => {
-      return res || fetch(e.request);
-    })
+    caches.match(e.request).then((res) => res || fetch(e.request))
   );
 });

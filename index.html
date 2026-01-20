@@ -1,294 +1,31 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<link rel="manifest" href="manifest_cep.json">
-<meta name="theme-color" content="#3498db">
-<link rel="apple-touch-icon" href="icon_cep.png">
+<div id="roteiroTopo">
+  <div class="linha">
+    <span class="rotulo">Ordem:</span>
 
-<meta charset="UTF-8">
-<title>Busca por CEP - PB</title>
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+    <span class="item">Data da Coleta</span>
+    <span class="separador">|</span>
 
-<style>
-*{box-sizing:border-box}
-html,body{margin:0;height:100%}
-body{
-  font-family:Arial,Helvetica,sans-serif;
-  background:linear-gradient(to bottom right,#2ecc71,#3498db);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-}
-.form-container{
-  background:rgba(255,255,255,.9);
-  width:520px;
-  max-width:92vw;
-  padding:22px;
-  border-radius:14px;
-  box-shadow:0 10px 30px rgba(0,0,0,.25);
-  max-height:90vh;
-  overflow:auto;
-}
-h2{text-align:center;margin:0 0 16px;font-weight:800}
+    <span class="item">Data de Nascimento</span>
+    <span class="separador">|</span>
 
-/* Botão de Instalação PWA */
-#installBtn {
-  display: none; /* Escondido por padrão */
-  width: 100%;
-  background: #f39c12;
-  color: white;
-  padding: 12px;
-  border: none;
-  border-radius: 10px;
-  font-weight: bold;
-  margin-bottom: 15px;
-  cursor: pointer;
-}
+    <span class="item">Cartão SUS</span>
+    <span class="separador">|</span>
 
-.tabs{display:flex;gap:6px;margin-bottom:14px}
-.tab{
-  flex:1;
-  padding:10px;
-  text-align:center;
-  cursor:pointer;
-  border-radius:10px;
-  background:#ddd;
-  font-weight:600;
-}
-.tab.active{background:#bbb}
-.tab-content{display:none}
-.tab-content.active{display:block}
-input{
-  width:100%;
-  padding:10px;
-  margin-bottom:8px;
-  border-radius:10px;
-  border:1px solid #ccc;
-  font-size: 16px;
-}
-.btns{display:flex;gap:8px;margin-top:6px;flex-wrap:wrap}
-button{
-  flex:1;
-  padding:10px;
-  border:none;
-  border-radius:10px;
-  color:#fff;
-  cursor:pointer;
-  background:#3498db;
-  font-weight:600;
-}
-button.gray{background:#607d8b}
-button.secondary{background:#2ecc71}
-.result{
-  margin-top:12px;
-  padding:10px;
-  background:#f9f9f9;
-  border-radius:10px;
-  border:1px solid #ccc;
-}
-.endereco{margin-bottom:10px}
-.divider{margin:10px 0}
-.label-bold{font-weight:600;}
-</style>
-</head>
+    <span class="item">Telefone</span>
+    <span class="separador">|</span>
 
-<body>
-<div class="form-container">
-<h2>BUSCA POR CEP - PB</h2>
+    <span class="item">Rua</span>
+    <span class="separador">|</span>
 
-<button id="installBtn">📲 INSTALAR APLICATIVO</button>
+    <span class="item">Bairro</span>
+    <span class="separador">|</span>
 
-<div class="tabs">
-  <div class="tab active" onclick="showTab('cep')">Busca por CEP</div>
-  <div class="tab" onclick="showTab('logradouro')">Busca por Logradouro</div>
-</div>
+    <span class="item">Cidade</span>
+    <span class="separador">|</span>
 
-<div id="cep" class="tab-content active">
-  <input id="cepInput" placeholder="Digite o CEP" onfocus="this.select()">
-  <div class="btns">
-    <button onclick="buscarCep()">Buscar</button>
-    <button class="gray" onclick="limpar()">Limpar</button>
+    <span class="item">CEP</span>
+    <span class="separador">|</span>
+
+    <span class="item">Responsável (SNM/EAM)</span>
   </div>
-  <div id="cepResult" class="result"></div>
 </div>
-
-<div id="logradouro" class="tab-content">
-  <input id="cidadeInput" value="João Pessoa" placeholder="Cidade" onfocus="this.select()">
-  <input id="logradouroInput" placeholder="Logradouro" onfocus="this.select()">
-  <div class="btns">
-    <button onclick="buscarLogradouro()">Buscar</button>
-    <button class="gray" onclick="limpar()">Limpar</button>
-  </div>
-  <div id="logradouroResult" class="result"></div>
-</div>
-</div>
-
-<script>
-// --- LÓGICA DE INSTALAÇÃO PWA ---
-let deferredPrompt;
-const installBtn = document.getElementById('installBtn');
-
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  installBtn.style.display = 'block'; // Mostra o botão se puder instalar
-});
-
-installBtn.addEventListener('click', async () => {
-  if (deferredPrompt) {
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-    if (outcome === 'accepted') {
-      console.log('Usuário aceitou a instalação');
-    }
-    deferredPrompt = null;
-    installBtn.style.display = 'none';
-  }
-});
-
-window.addEventListener('appinstalled', () => {
-  installBtn.style.display = 'none';
-  console.log('PWA instalado com sucesso');
-});
-
-// --- REGISTRO DO SERVICE WORKER ---
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw_cep.js')
-    .then(() => console.log("PWA CEP: Ativo"))
-    .catch(err => console.log("PWA CEP: Erro", err));
-}
-
-const UF='PB';
-
-function showTab(id){
-  document.querySelectorAll('.tab,.tab-content')
-    .forEach(e=>e.classList.remove('active'));
-  document.querySelector(`[onclick="showTab('${id}')"]`).classList.add('active');
-  document.getElementById(id).classList.add('active');
-}
-
-function formatCep(c){
-  return c.replace(/^(\d{5})(\d{3})$/,'$1-$2');
-}
-
-function detectarTipoLogradouro(logradouro){
-  const tipos = {
-    'Avenida': /^(Avenida|Avenida |Av\.?|Av |Avenida,|Av\.,)/i,
-    'Travessa': /^(Travessa|Travessa |Trav\.?|Trav |Travessa,|Trav\.,)/i,
-    'Comunidade': /^(Comunidade|Comunidade )/i,
-    'Rua': /^(Rua|Rua |R\.?|R |Rua,|R\.,)/i
-  };
-  
-  for(const [tipo, regex] of Object.entries(tipos)){
-    if(regex.test(logradouro)){
-      return {tipo, nome: logradouro.replace(regex, '').trim()};
-    }
-  }
-  
-  const matchEspecial = logradouro.match(/^(Sítio|Sitio|Assentamento|Engenho)\s+(.*)/i);
-  if(matchEspecial){
-    return {tipo: matchEspecial[1], nome: matchEspecial[2].trim()};
-  }
-  
-  return {tipo: 'Rua', nome: logradouro.trim()};
-}
-
-function ajustarBairro(bairroApi, logradouro){
-  if(bairroApi && bairroApi.trim()) return bairroApi;
-  if(/^(Sítio|Sitio|Assentamento|Engenho)/i.test(logradouro)){
-    return 'Zona Rural';
-  }
-  return 'Centro';
-}
-
-function buildEndereco({logradouroOriginal,bairro,cidade,cep}){
-  const {tipo, nome} = detectarTipoLogradouro(logradouroOriginal);
-  const linhaLogradouro = `<div><span class="label-bold">${tipo}:</span> ${nome}</div>`;
-  const texto = `${tipo}: ${nome}\nBairro: ${bairro}\nCidade: ${cidade}\nCEP: ${cep}`;
-
-  return `
-  <div class="endereco">
-    ${linhaLogradouro}
-    <div><span class="label-bold">Bairro:</span> ${bairro}</div>
-    <div><span class="label-bold">Cidade:</span> ${cidade}</div>
-    <div><span class="label-bold">CEP:</span> ${cep}</div>
-    <div class="btns">
-      <button class="secondary" onclick="copiar(\`${texto}\`)">Copiar Endereço</button>
-      <button onclick="copiar('${cep}')">Copiar CEP</button>
-    </div>
-  </div>`;
-}
-
-async function buscarCep(){
-  const c = cepInput.value.replace(/\D/g,'');
-  if(c.length!==8){
-    cepResult.innerHTML='CEP inválido';
-    return;
-  }
-  try {
-    const r = await fetch(`https://viacep.com.br/ws/${c}/json/`);
-    const d = await r.json();
-    if(d.erro || d.uf!==UF){
-      cepResult.innerHTML='CEP não encontrado';
-      return;
-    }
-    cepResult.innerHTML = buildEndereco({
-      logradouroOriginal: d.logradouro,
-      bairro: ajustarBairro(d.bairro,d.logradouro),
-      cidade: `${d.localidade}/${d.uf}`,
-      cep: formatCep(c)
-    });
-  } catch (err) {
-    cepResult.innerHTML='Erro de conexão (Offline?)';
-  }
-  cepInput.focus();
-  cepInput.select();
-}
-
-async function buscarLogradouro(){
-  const cidade = cidadeInput.value;
-  const log = logradouroInput.value;
-  try {
-    const r = await fetch(`https://viacep.com.br/ws/${UF}/${cidade}/${log}/json/`);
-    const d = await r.json();
-    if(!Array.isArray(d) || !d.length){
-      logradouroResult.innerHTML='Nenhum resultado';
-      return;
-    }
-    logradouroResult.innerHTML = d.map(i=>{
-      const bruto = i.logradouro || log;
-      return buildEndereco({
-        logradouroOriginal: bruto,
-        bairro: ajustarBairro(i.bairro,bruto),
-        cidade: `${i.localidade}/${i.uf}`,
-        cep: i.cep || '58000-000'
-      });
-    }).join('<hr class="divider">');
-  } catch (err) {
-    logradouroResult.innerHTML='Erro de conexão (Offline?)';
-  }
-  logradouroInput.focus();
-  logradouroInput.select();
-}
-
-function copiar(t){
-  navigator.clipboard.writeText(t).then(()=>{
-    const campo=document.querySelector('.tab-content.active input:last-of-type');
-    campo.focus();
-    campo.select();
-  });
-}
-
-function limpar(){
-  cepInput.value='';
-  logradouroInput.value='';
-  cepResult.innerHTML='';
-  logradouroResult.innerHTML='';
-  document.querySelector('.form-container').scrollIntoView({behavior:'smooth'});
-  const campo=document.querySelector('.tab-content.active input:last-of-type');
-  campo.focus();
-  campo.select();
-}
-</script>
-</body>
-</html>

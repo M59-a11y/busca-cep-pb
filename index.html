@@ -6,535 +6,241 @@
 <meta charset="UTF-8">
 <title>Busca por CEP - PB</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
 <style>
-  * { box-sizing: border-box; }
-  :root {
-    --green: #2ecc71;
-    --blue: #3498db;
-    --text: #263238;
-    --muted: #546e7a;
-    --panel: rgba(255, 255, 255, 0.85);
-    --border: #e0e0e0;
-    --shadow: rgba(0,0,0,0.25);
-  }
-  html, body { height: 100%; margin: 0; }
-  body {
-    font-family: Arial, Helvetica, sans-serif;
-    color: var(--text);
-    background: linear-gradient(to bottom right, var(--green), var(--blue));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .form-container {
-    background: var(--panel);
-    backdrop-filter: blur(6px);
-    width: 520px;
-    max-width: 92vw;
-    padding: 22px;
-    border-radius: 14px;
-    box-shadow: 0 10px 30px var(--shadow);
-    overflow-wrap: break-word;
-  }
-  h2 {
-    text-align: center;
-    margin: 0 0 16px 0;
-    font-size: 22px;
-    font-weight: 800;
-    letter-spacing: 1px;
-  }
-  .tabs {
-    display: flex;
-    gap: 6px;
-    margin-bottom: 14px;
-  }
-  .tab {
-    flex: 1;
-    padding: 10px 12px;
-    text-align: center;
-    cursor: pointer;
-    user-select: none;
-    border-radius: 10px;
-    background: rgba(0,0,0,0.08);
-    transition: background .2s ease;
-    font-weight: 600;
-  }
-  .tab.active { background: rgba(0,0,0,0.18); }
-  .tab-content { display: none; }
-  .tab-content.active { display: block; }
-
-  input {
-    width: 100%;
-    padding: 10px 12px;
-    border-radius: 10px;
-    border: 1px solid #cfd8dc;
-    margin-bottom: 8px;
-    transition: border-color .2s, background .2s;
-    font-size: 14px;
-  }
-  input:focus {
-    outline: none;
-    border-color: var(--blue);
-    background: #eef7ff;
-  }
-
-  .btns {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 6px;
-    max-width: 100%;
-  }
-  button {
-    flex: 1;
-    min-width: 120px;
-    padding: 10px 12px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    color: #fff;
-    font-weight: 600;
-    background: var(--blue);
-  }
-  button.secondary { background: var(--green); }
-  button.gray { background: #607d8b; }
-  button:hover { filter: brightness(0.95); }
-
-  .result {
-    margin-top: 12px;
-    padding: 10px;
-    background: rgba(255,255,255,0.9);
-    border-radius: 10px;
-    border: 1px solid var(--border);
-    max-width: 100%;
-    word-wrap: break-word;
-  }
-  .endereco { margin-bottom: 10px; }
-  .divider {
-    height: 1px;
-    background: var(--border);
-    margin: 10px 0;
-    border: none;
-  }
-  .muted { color: var(--muted); font-size: 13px; }
-  .resultado {
-      margin-top: 20px;
-      padding: 10px;
-      background: #eef;
-      border-radius: 6px;
-      max-height: 200px;   /* altura máxima da caixa */
-      overflow-y: auto;    /* adiciona rolagem vertical */
-    }
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{
+  font-family:Arial,Helvetica,sans-serif;
+  background:linear-gradient(to bottom right,#2ecc71,#3498db);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+.form-container{
+  background:rgba(255,255,255,.9);
+  width:520px;
+  max-width:92vw;
+  padding:22px;
+  border-radius:14px;
+  box-shadow:0 10px 30px rgba(0,0,0,.25);
+  max-height:90vh;
+  overflow:auto;
+}
+h2{text-align:center;margin:0 0 16px;font-weight:800}
+.tabs{display:flex;gap:6px;margin-bottom:14px}
+.tab{
+  flex:1;
+  padding:10px;
+  text-align:center;
+  cursor:pointer;
+  border-radius:10px;
+  background:#ddd;
+  font-weight:600;
+}
+.tab.active{background:#bbb}
+.tab-content{display:none}
+.tab-content.active{display:block}
+input{
+  width:100%;
+  padding:10px;
+  margin-bottom:8px;
+  border-radius:10px;
+  border:1px solid #ccc;
+}
+.btns{display:flex;gap:8px;margin-top:6px;flex-wrap:wrap}
+button{
+  flex:1;
+  padding:10px;
+  border:none;
+  border-radius:10px;
+  color:#fff;
+  cursor:pointer;
+  background:#3498db;
+  font-weight:600;
+}
+button.gray{background:#607d8b}
+button.secondary{background:#2ecc71}
+.result{
+  margin-top:12px;
+  padding:10px;
+  background:#f9f9f9;
+  border-radius:10px;
+  border:1px solid #ccc;
+}
+.endereco{margin-bottom:10px}
+.divider{margin:10px 0}
+.label-bold{font-weight:600;}
 </style>
 </head>
+
 <body>
-  <div class="form-container">
-    <h2>BUSCA POR CEP - PB</h2>
+<div class="form-container">
+<h2>BUSCA POR CEP - PB</h2>
 
-    <div class="tabs">
-      <div class="tab active" onclick="showTab('cep')">Busca por CEP</div>
-      <div class="tab" onclick="showTab('logradouro')">Busca por Logradouro</div>
-    </div>
+<div class="tabs">
+  <div class="tab active" onclick="showTab('cep')">Busca por CEP</div>
+  <div class="tab" onclick="showTab('logradouro')">Busca por Logradouro</div>
+</div>
 
-    <div id="cep" class="tab-content active">
-      <input type="text" id="cepInput" placeholder="Digite o CEP (somente números)" onfocus="this.select()">
-      <div class="btns">
-        <button onclick="buscarCep()">Buscar CEP</button>
-        <button class="gray" onclick="limpar()">Limpar</button>
-      </div>
-      <div id="cepResult" class="result"></div>
-    </div>
-
-    <div id="logradouro" class="tab-content">
-      <input type="text" id="cidadeInput" placeholder="Cidade (ex.: João Pessoa)" value="João Pessoa" list="cidadesPB" onfocus="this.select()">
-      <datalist id="cidadesPB">
-        <option value="Água Branca">
-		  <option value="Aguiar">
-		  <option value="Alagoa Grande">
-		  <option value="Alagoa Nova">
-		  <option value="Alagoinha">
-		  <option value="Alcantil">
-		  <option value="Algodão de Jandaíra">
-		  <option value="Alhandra">
-		  <option value="Amparo">
-		  <option value="Aparecida">
-		  <option value="Araçagi">
-		  <option value="Arara">
-		  <option value="Araruna">
-		  <option value="Areia">
-		  <option value="Areia de Baraúnas">
-		  <option value="Areial">
-		  <option value="Aroeiras">
-		  <option value="Assunção">
-		  <option value="Baía da Traição">
-		  <option value="Bananeiras">
-		  <option value="Baraúna">
-		  <option value="Barra de Santa Rosa">
-		  <option value="Barra de Santana">
-		  <option value="Barra de São Miguel">
-		  <option value="Bayeux">
-		  <option value="Belém">
-		  <option value="Belém do Brejo do Cruz">
-		  <option value="Bernardino Batista">
-		  <option value="Boa Ventura">
-		  <option value="Boa Vista">
-		  <option value="Bom Jesus">
-		  <option value="Bom Sucesso">
-		  <option value="Bonito de Santa Fé">
-		  <option value="Boqueirão">
-		  <option value="Borborema">
-		  <option value="Brejo do Cruz">
-		  <option value="Brejo dos Santos">
-		  <option value="Caaporã">
-		  <option value="Cabaceiras">
-		  <option value="Cabedelo">
-		  <option value="Cachoeira dos Índios">
-		  <option value="Cacimba de Areia">
-		  <option value="Cacimba de Dentro">
-		  <option value="Cacimbas">
-		  <option value="Caiçara">
-		  <option value="Cajazeiras">
-		  <option value="Cajazeirinhas">
-		  <option value="Caldas Brandão">
-		  <option value="Camalaú">
-		  <option value="Campina Grande">
-		  <option value="Capim">
-		  <option value="Caraúbas">
-		  <option value="Carrapateira">
-		  <option value="Casserengue">
-		  <option value="Catingueira">
-		  <option value="Catolé do Rocha">
-		  <option value="Caturité">
-		  <option value="Conceição">
-		  <option value="Condado">
-		  <option value="Conde">
-		  <option value="Congo">
-		  <option value="Coremas">
-		  <option value="Coxixola">
-		  <option value="Cruz do Espírito Santo">
-		  <option value="Cubati">
-		  <option value="Cuité">
-		  <option value="Cuité de Mamanguape">
-		  <option value="Cuitegi">
-		  <option value="Curral de Cima">
-		  <option value="Curral Velho">
-		  <option value="Damião">
-		  <option value="Desterro">
-		  <option value="Diamante">
-		  <option value="Dona Inês">
-		  <option value="Duas Estradas">
-		  <option value="Emas">
-		  <option value="Esperança">
-		  <option value="Fagundes">
-		  <option value="Frei Martinho">
-		  <option value="Gado Bravo">
-		  <option value="Guarabira">
-		  <option value="Gurinhém">
-		  <option value="Gurjão">
-		  <option value="Ibiara">
-		  <option value="Igaracy">
-		  <option value="Imaculada">
-		  <option value="Ingá">
-		  <option value="Itabaiana">
-		  <option value="Itaporanga">
-		  <option value="Itapororoca">
-		  <option value="Itatuba">
-		  <option value="Jacaraú">
-		  <option value="Jericó">
-		  <option value="João Pessoa">
-		  <option value="Juarez Távora">
-		  <option value="Juazeirinho">
-		  <option value="Junco do Seridó">
-		  <option value="Juripiranga">
-		  <option value="Juru">
-		  <option value="Lagoa">
-		  <option value="Lagoa de Dentro">
-		  <option value="Lagoa Seca">
-		  <option value="Lastro">
-		  <option value="Livramento">
-		  <option value="Logradouro">
-		  <option value="Lucena">
-		  <option value="Mãe d'Água">
-		  <option value="Malta">
-		  <option value="Mamanguape">
-		  <option value="Manaíra">
-		  <option value="Marcação">
-		  <option value="Mari">
-		  <option value="Marizópolis">
-		  <option value="Massaranduba">
-		  <option value="Mataraca">
-		  <option value="Matinhas">
-		  <option value="Mato Grosso">
-		  <option value="Maturéia">
-		  <option value="Mogeiro">
-		  <option value="Montadas">
-		  <option value="Monte Horebe">
-		  <option value="Monteiro">
-		  <option value="Mulungu">
-		  <option value="Natuba">
-		  <option value="Nazarezinho">
-		  <option value="Nova Floresta">
-		  <option value="Nova Olinda">
-		  <option value="Nova Palmeira">
-		  <option value="Olho d'Água">
-		  <option value="Olivedos">
-		  <option value="Ouro Velho">
-		  <option value="Parari">
-		  <option value="Passagem">
-		  <option value="Patos">
-		  <option value="Paulista">
-		  <option value="Pedra Branca">
-		  <option value="Pedra Lavrada">
-		  <option value="Pedras de Fogo">
-		  <option value="Pedro Régis">
-		  <option value="Piancó">
-		  <option value="Picuí">
-		  <option value="Pilar">
-		  <option value="Pilões">
-		  <option value="Pilõezinhos">
-		  <option value="Pirpirituba">
-		  <option value="Pitimbu">
-		  <option value="Pocinhos">
-		  <option value="Poço Dantas">
-		  <option value="Poço de José de Moura">
-		  <option value="Pombal">
-		  <option value="Prata">
-		  <option value="Princesa Isabel">
-		  <option value="Puxinanã">
-		  <option value="Queimadas">
-		  <option value="Quixaba">
-		  <option value="Remígio">
-		  <option value="Riachão">
-		  <option value="Riachão do Bacamarte">
-		  <option value="Riachão do Poço">
-		  <option value="Riacho de Santo Antônio">
-		  <option value="Riacho dos Cavalos">
-		  <option value="Rio Tinto">
-		  <option value="Salgadinho">
-		  <option value="Salgado de São Félix">
-		  <option value="Santa Cecília">
-		  <option value="Santa Cruz">
-		  <option value="Santa Helena">
-		  <option value="Santa Inês">
-		  <option value="Santa Luzia">
-		  <option value="Santa Rita">
-		  <option value="Santa Teresinha">
-		  <option value="Santana de Mangueira">
-		  <option value="Santana dos Garrotes">
-		  <option value="Santo André">
-		  <option value="São Bentinho">
-		  <option value="São Bento">
-		  <option value="São Domingos">
-		  <option value="São Domingos do Cariri">
-		  <option value="São Francisco">
-		  <option value="São João do Cariri">
-		  <option value="São João do Rio do Peixe">
-		  <option value="São João do Tigre">
-		  <option value="São José da Lagoa Tapada">
-		  <option value="São José de Caiana">
-		  <option value="São José de Espinharas">
-		  <option value="São José de Piranhas">
-		  <option value="São José de Princesa">
-		  <option value="São José do Bonfim">
-		  <option value="São José do Brejo do Cruz">
-		  <option value="São José do Sabugi">
-		  <option value="São José dos Cordeiros">
-		  <option value="São Mamede">
-		  <option value="São Miguel de Taipu">
-		  <option value="São Sebastião de Lagoa de Roça">
-		  <option value="São Sebastião do Umbuzeiro">
-		  <option value="Sapé">
-		  <option value="Seridó">
-		  <option value="Serra Branca">
-		  <option value="Serra da Raiz">
-		  <option value="Serra Grande">
-		  <option value="Serra Redonda">
-		  <option value="Serraria">
-		  <option value="Sertãozinho">
-		  <option value="Sobrado">
-		  <option value="Solânea">
-		  <option value="Soledade">
-		  <option value="Sossêgo">
-		  <option value="Sousa">
-		  <option value="Sumé">
-		  <option value="Tacima">
-		  <option value="Taperoá">
-		  <option value="Tavares">
-		  <option value="Teixeira">
-		  <option value="Tenório">
-		  <option value="Triunfo">
-		  <option value="Uiraúna">
-		  <option value="Umbuzeiro">
-		  <option value="Várzea">
-		  <option value="Vieirópolis">
-		  <option value="Vista Serrana">
-		  <option value="Zabelê">
-      </datalist>
-
-      <input type="text" id="logradouroInput" placeholder="Digite o logradouro (ex.: Projetada)" onfocus="this.select()" list="sugestoes">
-      <datalist id="sugestoes">
-        <option value="Projetada">
-        <option value="Lindolfo Gonçalves Chaves">
-        <option value="Avenida João Pessoa">
-      </datalist>
-
-      <div class="btns">
-        <button onclick="buscarLogradouro()">Buscar Logradouro</button>
-        <button class="gray" onclick="limpar()">Limpar</button>
-      </div>
-      <span class="muted">UF fixa: PB (Paraíba). Resultados com mesmo nome em bairros diferentes são exibidos.</span>
-      <div id="logradouroResult" class="result"></div>
-    </div>
+<div id="cep" class="tab-content active">
+  <input id="cepInput" placeholder="Digite o CEP" onfocus="this.select()">
+  <div class="btns">
+    <button onclick="buscarCep()">Buscar</button>
+    <button class="gray" onclick="limpar()">Limpar</button>
   </div>
+  <div id="cepResult" class="result"></div>
+</div>
+
+<div id="logradouro" class="tab-content">
+  <input id="cidadeInput" value="João Pessoa" placeholder="Cidade" onfocus="this.select()">
+  <input id="logradouroInput" placeholder="Logradouro" onfocus="this.select()">
+  <div class="btns">
+    <button onclick="buscarLogradouro()">Buscar</button>
+    <button class="gray" onclick="limpar()">Limpar</button>
+  </div>
+  <div id="logradouroResult" class="result"></div>
+</div>
+</div>
 
 <script>
-  const UF = 'PB';
+const UF='PB';
 
-  function showTab(tabId) {
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-    document.querySelector(`.tab[onclick="showTab('${tabId}')"]`).classList.add('active');
-    document.getElementById(tabId).classList.add('active');
-  }
+function showTab(id){
+  document.querySelectorAll('.tab,.tab-content')
+    .forEach(e=>e.classList.remove('active'));
+  document.querySelector(`[onclick="showTab('${id}')"]`).classList.add('active');
+  document.getElementById(id).classList.add('active');
+}
 
-  function formatCep(cep) {
-    const digits = (cep || '').replace(/\D/g, '');
-    if (digits.length !== 8) return cep;
-    return digits.replace(/^(\d{5})(\d{3})$/, "$1-$2");
-  }
+function formatCep(c){
+  return c.replace(/^(\d{5})(\d{3})$/,'$1-$2');
+}
 
-  function cleanLogradouro(logradouro) {
-    if (!logradouro) return '';
-    return logradouro.replace(/^(Rua|Avenida|Travessa|Praça|Alameda|Rodovia)\s+/i, '').trim();
-  }
-
-  function buildEnderecoHtml({ rua, bairro, cidade, cep }) {
-    const textoCopiar = `Rua: ${rua}\nBairro: ${bairro}\nCidade: ${cidade}\nCEP: ${cep}`;
-    return `
-      <div class="endereco">
-        <div><strong>Rua:</strong> ${rua}</div>
-        <div><strong>Bairro:</strong> ${bairro}</div>
-        <div><strong>Cidade:</strong> ${cidade}</div>
-        <div><strong>CEP:</strong> ${cep}</div>
-        <div class="btns">
-          <button class="secondary" onclick="copiar(\`${textoCopiar}\`)">Copiar Endereço</button>
-          <button onclick="copiar('${cep}')">Copiar CEP</button>
-        </div>
-      </div>
-    `;
-  }
-
-  function renderEndereco(containerId, dados) {
-    document.getElementById(containerId).innerHTML = buildEnderecoHtml(dados);
-  }
-
-  function renderError(containerId, msg) {
-    document.getElementById(containerId).innerHTML = `<span class="muted">${msg}</span>`;
-  }
-
-  async function buscarCep() {
-    const cepRaw = document.getElementById('cepInput').value.trim();
-    const cepDigits = cepRaw.replace(/\D/g, '');
-    if (cepDigits.length !== 8) {
-      renderError('cepResult', 'Informe um CEP com 8 dígitos.');
-      return;
-    }
-    try {
-      const resp = await fetch(`https://viacep.com.br/ws/${cepDigits}/json/`);
-      const data = await resp.json();
-      if (data.erro) { renderError('cepResult', 'CEP não encontrado.'); return; }
-      if (data.uf !== UF) { renderError('cepResult', `CEP encontrado é de ${data.uf}, não de ${UF}.`); return; }
-
-      const rua = cleanLogradouro(data.logradouro);
-      const bairro = (data.bairro || '').trim();
-      const cidade = `${data.localidade}/${data.uf}`;
-      const cep = formatCep(cepDigits);
-
-      renderEndereco('cepResult', { rua, bairro, cidade, cep });
-    } catch {
-      renderError('cepResult', 'Erro ao consultar CEP.');
+/* Detecta e extrai tipo específico do logradouro */
+function detectarTipoLogradouro(logradouro){
+  const tipos = {
+    'Avenida': /^(Avenida|Avenida |Av\.?|Av |Avenida,|Av\.,)/i,
+    'Travessa': /^(Travessa|Travessa |Trav\.?|Trav |Travessa,|Trav\.,)/i,
+    'Comunidade': /^(Comunidade|Comunidade )/i,
+    'Rua': /^(Rua|Rua |R\.?|R |Rua,|R\.,)/i
+  };
+  
+  for(const [tipo, regex] of Object.entries(tipos)){
+    if(regex.test(logradouro)){
+      return {tipo, nome: logradouro.replace(regex, '').trim()};
     }
   }
+  
+  // Logradouros especiais
+  const matchEspecial = logradouro.match(/^(Sítio|Sitio|Assentamento|Engenho)\s+(.*)/i);
+  if(matchEspecial){
+    return {tipo: matchEspecial[1], nome: matchEspecial[2].trim()};
+  }
+  
+  return {tipo: 'Rua', nome: logradouro.trim()};
+}
 
-  // CEP geral por cidade da PB. Se a cidade não estiver mapeada, usa 58000-000 (padrão estadual).
-  function obterCepGeralDaCidade(cidade) {
-    const mapa = {
-      'João Pessoa': '58000-000',
-      'Campina Grande': '58400-000',
-      'Santa Rita': '58300-000',
-      'Bayeux': '58307-000',
-      'Cabedelo': '58310-000',
-      'Guarabira': '58200-000',
-      'Patos': '58700-000',
-      'Sousa': '58800-000',
-      'Cajazeiras': '58900-000',
-      'Sapé': '58340-000',
-      'Mamanguape': '58280-000',
-      'Monteiro': '58500-000',
-      'Pombal': '58840-000',
-      'Itabaiana': '58360-000',
-      'Esperança': '58135-000',
-      'Princesa Isabel': '58755-000'
-    };
-    return mapa[cidade] || '58000-000';
+function ajustarBairro(bairroApi, logradouro){
+  if(bairroApi && bairroApi.trim()) return bairroApi;
+  if(/^(Sítio|Sitio|Assentamento|Engenho)/i.test(logradouro)){
+    return 'Zona Rural';
+  }
+  return 'Centro';
+}
+
+function buildEndereco({logradouroOriginal,bairro,cidade,cep}){
+  const {tipo, nome} = detectarTipoLogradouro(logradouroOriginal);
+
+  const linhaLogradouro = `<div><span class="label-bold">${tipo}:</span> ${nome}</div>`;
+
+  const texto = `${tipo}: ${nome}\nBairro: ${bairro}\nCidade: ${cidade}\nCEP: ${cep}`;
+
+  return `
+  <div class="endereco">
+    ${linhaLogradouro}
+    <div><span class="label-bold">Bairro:</span> ${bairro}</div>
+    <div><span class="label-bold">Cidade:</span> ${cidade}</div>
+    <div><span class="label-bold">CEP:</span> ${cep}</div>
+    <div class="btns">
+      <button class="secondary" onclick="copiar(\`${texto}\`)">Copiar Endereço</button>
+      <button onclick="copiar('${cep}')">Copiar CEP</button>
+    </div>
+  </div>`;
+}
+
+async function buscarCep(){
+  const c = cepInput.value.replace(/\D/g,'');
+  if(c.length!==8){
+    cepResult.innerHTML='CEP inválido';
+    return;
   }
 
-  async function buscarLogradouro() {
-    const cidade = document.getElementById('cidadeInput').value.trim();
-    const logradouroInput = document.getElementById('logradouroInput').value.trim();
-    if (!cidade || !logradouroInput) {
-      renderError('logradouroResult', 'Informe cidade e logradouro.');
-      return;
-    }
-    try {
-      const url = `https://viacep.com.br/ws/${UF}/${encodeURIComponent(cidade)}/${encodeURIComponent(logradouroInput)}/json/`;
-      const resp = await fetch(url);
-      const data = await resp.json();
+  const r = await fetch(`https://viacep.com.br/ws/${c}/json/`);
+  const d = await r.json();
 
-      if (!Array.isArray(data) || data.length === 0) {
-        renderError('logradouroResult', 'Nenhum endereço encontrado para esse logradouro na cidade informada.');
-        return;
-      }
-
-      const cepGeral = obterCepGeralDaCidade(cidade);
-
-      const html = data.map(item => {
-        // Usa o logradouro digitado se o retorno vier vazio
-        const rua = (item.logradouro && item.logradouro.trim())
-          ? cleanLogradouro(item.logradouro)
-          : logradouroInput;
-
-        const cidadeFmt = `${item.localidade}/${item.uf}`;
-
-        // Se não houver CEP específico, usa CEP geral da cidade
-        const temCep = !!(item.cep && item.cep.toString().trim());
-        const cepFmt = temCep ? formatCep(item.cep) : cepGeral;
-
-        // Se bairro vier vazio, força "Centro"
-        const bairro = (item.bairro && item.bairro.trim()) ? item.bairro : 'Centro';
-
-        return buildEnderecoHtml({ rua, bairro, cidade: cidadeFmt, cep: cepFmt });
-      }).join('<hr class="divider">');
-
-      document.getElementById('logradouroResult').innerHTML = html;
-    } catch {
-      renderError('logradouroResult', 'Erro ao consultar logradouro.');
-    }
+  if(d.erro || d.uf!==UF){
+    cepResult.innerHTML='CEP não encontrado';
+    return;
   }
 
-  function copiar(texto) {
-    navigator.clipboard.writeText(texto).then(() => {
-      alert("Copiado:\n" + texto);
+  cepResult.innerHTML = buildEndereco({
+    logradouroOriginal: d.logradouro,
+    bairro: ajustarBairro(d.bairro,d.logradouro),
+    cidade: `${d.localidade}/${d.uf}`,
+    cep: formatCep(c)
+  });
+
+  cepInput.focus();
+  cepInput.select();
+}
+
+async function buscarLogradouro(){
+  const cidade = cidadeInput.value;
+  const log = logradouroInput.value;
+
+  const r = await fetch(`https://viacep.com.br/ws/${UF}/${cidade}/${log}/json/`);
+  const d = await r.json();
+
+  if(!Array.isArray(d) || !d.length){
+    logradouroResult.innerHTML='Nenhum resultado';
+    return;
+  }
+
+  logradouroResult.innerHTML = d.map(i=>{
+    const bruto = i.logradouro || log;
+    return buildEndereco({
+      logradouroOriginal: bruto,
+      bairro: ajustarBairro(i.bairro,bruto),
+      cidade: `${i.localidade}/${i.uf}`,
+      cep: i.cep || '58000-000'
     });
-  }
+  }).join('<hr class="divider">');
 
-  function limpar() {
-    document.getElementById('cepInput').value = "";
-    document.getElementById('cidadeInput').value = "João Pessoa";
-    document.getElementById('logradouroInput').value = "";
-    document.getElementById('cepResult').innerHTML = "";
-    document.getElementById('logradouroResult').innerHTML = "";
-  }
+  logradouroInput.focus();
+  logradouroInput.select();
+}
+
+function copiar(t){
+  navigator.clipboard.writeText(t).then(()=>{
+    const campo=document.querySelector('.tab-content.active input:last-of-type');
+    campo.focus();
+    campo.select();
+  });
+}
+
+function limpar(){
+  cepInput.value='';
+  logradouroInput.value='';
+  cepResult.innerHTML='';
+  logradouroResult.innerHTML='';
+  document.querySelector('.form-container')
+    .scrollIntoView({behavior:'smooth'});
+
+  const campo=document.querySelector('.tab-content.active input:last-of-type');
+  campo.focus();
+  campo.select();
+}
 </script>
 </body>
 </html>

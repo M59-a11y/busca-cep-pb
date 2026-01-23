@@ -14,10 +14,8 @@ html,body{margin:0;height:100%}
 :root{
   --bg1:#0ea5e9;
   --bg2:#22c55e;
-
   --text:#0f172a;
   --muted:#64748b;
-
   --shadow:0 24px 70px rgba(0,0,0,.24);
   --radius:26px;
 }
@@ -42,13 +40,10 @@ body{
   padding:18px;
 }
 
-/* CARD PRINCIPAL (transparente, sem bordas) */
+/* ✅ CARD PRINCIPAL: abre SEMPRE no tamanho do print expandido */
 .form-container{
-  width: 1000px;
-  height: 620px;
-  max-width: 96vw;
-  max-height: 92vh;
-
+  width: min(1200px, 98vw);     /* mais largo */
+  height: min(720px, 94vh);     /* mais alto */
   border-radius: var(--radius);
   overflow:hidden;
 
@@ -67,13 +62,12 @@ body{
   align-items:center;
   justify-content:space-between;
   gap:12px;
-
   background: rgba(255,255,255,.22);
   border-bottom: 1px solid rgba(255,255,255,.18);
 }
 .header h2{
   margin:0;
-  font-size:24px;
+  font-size:28px;              /* mais parecido com o expandido */
   letter-spacing:.8px;
   font-weight:900;
 }
@@ -94,14 +88,14 @@ body{
 /* GRID */
 .body{
   display:grid;
-  grid-template-columns: 360px 1fr;
-  height: calc(620px - 70px);
-  max-height: calc(92vh - 70px);
+  grid-template-columns: 420px 1fr; /* ✅ lateral maior como print */
+  height: calc(min(720px, 94vh) - 78px);
+  min-height:0;
 }
 
 /* LATERAL */
 .sidebar{
-  padding:16px;
+  padding:18px;
   background: rgba(255,255,255,.07);
   border-right: 1px solid rgba(255,255,255,.18);
 }
@@ -116,12 +110,12 @@ body{
 }
 .tab{
   flex:1;
-  padding:12px 10px;
+  padding:14px 10px;
   text-align:center;
   cursor:pointer;
   border-radius:16px;
   font-weight:900;
-  font-size:14px;
+  font-size:15px;
   color:rgba(15,23,42,.65);
   user-select:none;
   transition:.2s;
@@ -137,17 +131,16 @@ body{
 
 /* BLOCOS */
 .block{
-  margin-top:14px;
-  padding:16px;
+  margin-top:16px;
+  padding:18px;
   border-radius:22px;
-
   background: rgba(255,255,255,.22);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 }
 label{
   display:block;
-  font-size:12px;
+  font-size:13px;
   font-weight:900;
   color:rgba(15,23,42,.75);
   margin:0 0 8px;
@@ -155,35 +148,35 @@ label{
 }
 input{
   width:100%;
-  padding:14px 14px;
+  padding:16px 16px;
   border-radius:18px;
   border:1px solid rgba(255,255,255,.45);
-  font-size:15px;
+  font-size:16px;
   outline:none;
   transition:.15s;
   background: rgba(255,255,255,.70);
-  text-transform: uppercase; /* melhora atendimento */
+  text-transform: uppercase;
 }
 input:focus{
   border-color: rgba(14,165,233,.55);
   box-shadow:0 0 0 4px rgba(14,165,233,.18);
 }
 .hint{
-  margin-top:10px;
-  font-size:13px;
+  margin-top:12px;
+  font-size:14px;
   color:rgba(15,23,42,.72);
 }
 
 /* BOTÕES */
 .btns{
   display:flex;
-  gap:12px;
-  margin-top:14px;
+  gap:14px;
+  margin-top:16px;
   flex-wrap:wrap;
 }
 button{
   flex:1;
-  padding:12px 14px;
+  padding:14px 16px;
   border:none;
   border-radius:18px;
   color:#fff;
@@ -191,6 +184,7 @@ button{
   font-weight:900;
   letter-spacing:.2px;
   transition:.15s;
+  font-size:15px;
 }
 button:hover{transform: translateY(-1px)}
 button:active{transform:none}
@@ -200,81 +194,95 @@ button.secondary{background:#16a34a}
 
 /* PAINEL RESULTADOS */
 .main{
-  padding:18px;
+  padding:20px;
   background: rgba(255,255,255,.06);
+  display:flex;
+  flex-direction:column;
+  min-height:0;
 }
 .title{
   font-weight:900;
-  font-size:15px;
+  font-size:18px;
   color:rgba(15,23,42,.72);
   letter-spacing:.45px;
-  margin:2px 0 10px;
+  margin:2px 0 12px;
 }
-.result{
-  padding:14px;
-  border-radius:22px;
 
+/* ✅ RESULTADOS: rola SEM BARRA e ocupa o espaço */
+.result{
+  flex:1;
+  min-height:0;
+
+  padding:16px;
+  border-radius:22px;
   background: rgba(255,255,255,.14);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 
-  height: calc(100% - 32px);
   overflow:auto;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior:smooth;
+
+  scrollbar-width:none;
+  -ms-overflow-style:none;
 }
+.result::-webkit-scrollbar{width:0;height:0}
 
 /* card endereço */
 .endereco{
-  padding:14px;
-  border-radius:22px;
+  padding:18px;
+  border-radius:24px;
   background: rgba(255,255,255,.70);
 }
 .divider{
   height:1px;
   border:0;
   border-top:1px dashed rgba(15,23,42,.24);
-  margin:12px 0;
+  margin:18px 0;
 }
 .label-bold{font-weight:900}
 .small-actions{
   display:flex;
-  gap:12px;
+  gap:14px;
   flex-wrap:wrap;
-  margin-top:12px;
+  margin-top:14px;
 }
-.small-actions button{padding:12px 12px}
+.small-actions button{padding:14px 14px}
 
 .notice{
-  padding:12px;
-  border-radius:20px;
+  padding:14px;
+  border-radius:22px;
   background: rgba(245,158,11,.18);
   color:#7c2d12;
   font-weight:900;
   margin-bottom:12px;
 }
 .loading{
-  padding:12px;
-  border-radius:20px;
+  padding:14px;
+  border-radius:22px;
   background: rgba(14,165,233,.18);
   color:rgba(15,23,42,.95);
   font-weight:900;
 }
 
-/* ===== remove barra de rolagem (continua rolando no mouse) ===== */
-.result{
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-.result::-webkit-scrollbar{
-  width:0;
-  height:0;
-}
-
-/* responsivo */
-@media (max-width: 860px){
-  .form-container{height:auto}
-  .body{grid-template-columns:1fr; height:auto}
-  .sidebar{border-right:none;border-bottom:1px solid rgba(255,255,255,.18)}
-  .result{height:360px}
+/* ✅ Se a tela for pequena, continua responsivo */
+@media (max-width: 980px){
+  .form-container{
+    width:min(98vw, 900px);
+    height:min(94vh, 680px);
+  }
+  .body{
+    grid-template-columns:1fr;
+    height:auto;
+  }
+  .sidebar{
+    border-right:none;
+    border-bottom:1px solid rgba(255,255,255,.18);
+  }
+  .result{
+    height:420px;
+    flex:none;
+  }
 }
 </style>
 </head>
@@ -313,10 +321,10 @@ button.secondary{background:#16a34a}
         <div id="logradouro" class="tab-content">
           <div class="block">
             <label for="cidadeInput">CIDADE</label>
-            <input id="cidadeInput" value="João Pessoa" placeholder="Cidade" onfocus="this.select()">
+            <input id="cidadeInput" value="JOÃO PESSOA" placeholder="Cidade" onfocus="this.select()">
 
             <label for="logradouroInput" style="margin-top:12px">RUA / LOGRADOURO</label>
-            <input id="logradouroInput" placeholder="Ex.: ELIAS CAVALCANTE" onfocus="this.select()">
+            <input id="logradouroInput" placeholder="EX.: AVENIDA CRUZ DAS ARMAS" onfocus="this.select()">
 
             <div class="hint">Pode digitar só parte do nome. Se CEP estiver ilegível, pesquise pela rua.</div>
 
@@ -515,17 +523,8 @@ cepInput.addEventListener('input', ()=>{
   let v = cepInput.value.replace(/\D/g,'').slice(0,8);
   if(v.length > 5) v = v.slice(0,5) + '-' + v.slice(5);
   cepInput.value = v;
-
   const c = v.replace(/\D/g,'');
   if(c.length === 8) buscarCep();
-});
-
-cepInput.addEventListener('paste', ()=>{
-  setTimeout(()=>{
-    let v = cepInput.value.replace(/\D/g,'').slice(0,8);
-    if(v.length > 5) v = v.slice(0,5) + '-' + v.slice(5);
-    cepInput.value = v;
-  },0);
 });
 
 /* buscar CEP */
@@ -580,7 +579,6 @@ async function buscarLogradouro(){
 
   logRaw = logRaw.replace(/\bPB\b/ig,'').trim();
 
-  /* aceita entrada: "RUA X, SANTA RITA PB" */
   if(logRaw.includes(',')){
     const partes = logRaw.split(',').map(p=>p.trim()).filter(Boolean);
     if(partes.length >= 2){
@@ -658,7 +656,6 @@ function limpar(){
   if(campo){ campo.focus(); campo.select(); }
 }
 
-/* Enter para buscar no tab atual */
 document.addEventListener('keydown', (e)=>{
   if(e.key === 'Enter'){
     const tab = document.querySelector('.tab-content.active')?.id;
@@ -667,7 +664,6 @@ document.addEventListener('keydown', (e)=>{
   }
 });
 
-/* abre sempre no CEP */
 window.addEventListener('load', ()=> showTab('cep'));
 </script>
 </body>

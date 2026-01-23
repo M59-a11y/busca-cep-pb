@@ -10,20 +10,24 @@
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;height:100%}
+
 :root{
   --bg1:#0ea5e9;
   --bg2:#22c55e;
-  --card:#ffffffee;
+
   --text:#0f172a;
   --muted:#64748b;
-  --border:#e2e8f0;
-  --shadow:0 16px 45px rgba(0,0,0,.20);
-  --radius:18px;
+  --border:rgba(15,23,42,.10);
+
+  --shadow:0 20px 55px rgba(0,0,0,.25);
+  --radius:26px;
 }
+
 body{
   font-family: Arial, Helvetica, sans-serif;
-  background: radial-gradient(1200px 700px at 20% 10%, rgba(255,255,255,.25), transparent 60%),
-              linear-gradient(135deg, var(--bg2), var(--bg1));
+  background:
+    radial-gradient(1100px 650px at 18% 12%, rgba(255,255,255,.26), transparent 62%),
+    linear-gradient(135deg, var(--bg2), var(--bg1));
   display:flex;
   justify-content:center;
   align-items:center;
@@ -31,15 +35,23 @@ body{
   color:var(--text);
 }
 
-/* container */
+/* ==== JANELINHA ==== */
 .form-container{
-  width: 860px;
-  max-width: 98vw;
+  width: 1000px;
+  height: 620px;
+  max-width: 96vw;
+  max-height: 92vh;
+
   border-radius: var(--radius);
-  background: var(--card);
+  overflow: hidden;
+
+  /* glass effect */
+  background: rgba(255,255,255,.18);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
+  border: 1px solid rgba(255,255,255,.35);
   box-shadow: var(--shadow);
-  overflow:hidden;
-  border:1px solid rgba(255,255,255,.35);
 }
 
 /* header */
@@ -49,13 +61,13 @@ body{
   align-items:center;
   justify-content:space-between;
   gap:12px;
-  background: linear-gradient(180deg, rgba(255,255,255,.9), rgba(255,255,255,.4));
-  border-bottom:1px solid rgba(15,23,42,.06);
+  background: rgba(255,255,255,.32);
+  border-bottom: 1px solid rgba(255,255,255,.30);
 }
 .header h2{
   margin:0;
-  font-size:20px;
-  letter-spacing:.6px;
+  font-size:22px;
+  letter-spacing:.8px;
   font-weight:900;
 }
 .badge{
@@ -63,97 +75,109 @@ body{
   align-items:center;
   gap:8px;
   font-size:12px;
-  font-weight:700;
-  color:var(--muted);
+  font-weight:900;
+  color:rgba(15,23,42,.78);
 }
 .dot{
   width:10px;height:10px;border-radius:999px;
-  background: #22c55e;
+  background:#22c55e;
   box-shadow:0 0 0 4px rgba(34,197,94,.18);
 }
 
 /* body layout */
 .body{
   display:grid;
-  grid-template-columns: 320px 1fr;
+  grid-template-columns: 360px 1fr;
   gap:0;
-  min-height: 520px;
+  height: calc(620px - 62px); /* ajusta conforme header */
+  max-height: calc(92vh - 62px);
 }
 
 /* left panel */
 .sidebar{
   padding:16px;
-  border-right:1px solid rgba(15,23,42,.08);
-  background: rgba(255,255,255,.35);
+  border-right:1px solid rgba(255,255,255,.30);
+  background: rgba(255,255,255,.16);
 }
+
+/* tabs */
 .tabs{
   display:flex;
   gap:8px;
-  background:#fff;
-  border:1px solid var(--border);
-  border-radius:14px;
+  background: rgba(255,255,255,.55);
+  border:1px solid rgba(255,255,255,.45);
+  border-radius:18px;
   padding:6px;
 }
 .tab{
   flex:1;
-  padding:10px 10px;
+  padding:12px 10px;
   text-align:center;
   cursor:pointer;
-  border-radius:12px;
-  font-weight:800;
-  font-size:13px;
-  color:var(--muted);
+  border-radius:14px;
+  font-weight:900;
+  font-size:14px;
+  color:rgba(15,23,42,.65);
   user-select:none;
   transition:.2s;
 }
 .tab.active{
-  background: linear-gradient(135deg, rgba(34,197,94,.15), rgba(14,165,233,.15));
+  background: rgba(255,255,255,.65);
   color: var(--text);
   box-shadow: inset 0 0 0 1px rgba(15,23,42,.06);
 }
 
 /* form blocks */
+.tab-content{display:none}
+.tab-content.active{display:block}
+
 .block{
   margin-top:14px;
-  padding:12px;
-  border:1px solid rgba(15,23,42,.08);
-  border-radius:14px;
-  background: rgba(255,255,255,.85);
+  padding:14px;
+  border:1px solid rgba(255,255,255,.45);
+  border-radius:18px;
+  background: rgba(255,255,255,.68);
 }
 label{
   display:block;
   font-size:12px;
-  font-weight:800;
-  color:var(--muted);
-  margin:0 0 6px;
-  letter-spacing:.4px;
+  font-weight:900;
+  color:rgba(15,23,42,.70);
+  margin:0 0 8px;
+  letter-spacing:.5px;
 }
 input{
   width:100%;
-  padding:12px 12px;
-  border-radius:12px;
-  border:1px solid var(--border);
-  font-size:14px;
+  padding:14px 14px;
+  border-radius:16px;
+  border:1px solid rgba(15,23,42,.12);
+  font-size:15px;
   outline:none;
   transition:.15s;
+  background: rgba(255,255,255,.86);
 }
 input:focus{
-  border-color: rgba(14,165,233,.55);
-  box-shadow:0 0 0 4px rgba(14,165,233,.15);
-}
-.hint{
-  margin-top:8px;
-  font-size:12px;
-  color:var(--muted);
+  border-color: rgba(14,165,233,.60);
+  box-shadow:0 0 0 4px rgba(14,165,233,.16);
 }
 
-/* buttons */
-.btns{display:flex; gap:10px; margin-top:12px; flex-wrap:wrap}
+.hint{
+  margin-top:10px;
+  font-size:13px;
+  color:rgba(15,23,42,.68);
+}
+
+.btns{
+  display:flex;
+  gap:12px;
+  margin-top:14px;
+  flex-wrap:wrap;
+}
 button{
   flex:1;
-  padding:11px 12px;
+  padding:12px 14px;
   border:none;
-  border-radius:12px;
+  border-radius:16px;
   color:#fff;
   cursor:pointer;
   font-weight:900;
@@ -164,63 +188,74 @@ button:hover{transform: translateY(-1px)}
 button:active{transform:none}
 button.primary{background: linear-gradient(135deg, #0ea5e9, #22c55e)}
 button.gray{background:#64748b}
-button.secondary{background: #16a34a}
+button.secondary{background:#16a34a}
 
 /* right panel results */
 .main{
-  padding:16px 16px 18px;
+  padding:18px;
+  background: rgba(255,255,255,.08);
 }
 .title{
   font-weight:900;
-  font-size:14px;
-  color:var(--muted);
-  letter-spacing:.35px;
+  font-size:15px;
+  color:rgba(15,23,42,.70);
+  letter-spacing:.45px;
   margin:2px 0 10px;
 }
 .result{
-  padding:12px;
-  border-radius:14px;
-  border:1px solid rgba(15,23,42,.08);
-  background: rgba(255,255,255,.85);
-  max-height: 440px;
+  padding:14px;
+  border-radius:20px;
+  border:1px solid rgba(255,255,255,.30);
+  background: rgba(255,255,255,.38);
+  height: calc(100% - 32px);
   overflow:auto;
 }
+
+/* cards endereço */
 .endereco{
-  padding:12px;
-  border-radius:14px;
-  background:#fff;
+  padding:14px;
+  border-radius:18px;
+  background: rgba(255,255,255,.85);
   border:1px solid rgba(15,23,42,.08);
 }
-.endereco + .endereco{margin-top:10px}
-.divider{border:0;border-top:1px dashed rgba(15,23,42,.18); margin:12px 0}
+.divider{
+  height:1px;
+  border:0;
+  border-top:1px dashed rgba(15,23,42,.22);
+  margin:12px 0;
+}
 .label-bold{font-weight:900}
 .small-actions{
-  display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-top:12px;
 }
-.small-actions button{padding:10px}
+.small-actions button{padding:12px 12px}
+
 .notice{
-  padding:10px;
-  border-radius:14px;
-  border:1px solid rgba(245,158,11,.35);
-  background: rgba(245,158,11,.15);
+  padding:12px;
+  border-radius:18px;
+  border:1px solid rgba(245,158,11,.36);
+  background: rgba(245,158,11,.16);
   color:#7c2d12;
-  font-weight:800;
-  margin-bottom:10px;
+  font-weight:900;
+  margin-bottom:12px;
 }
 .loading{
-  padding:10px;
-  border-radius:14px;
-  background: rgba(14,165,233,.12);
-  border:1px solid rgba(14,165,233,.25);
-  color:#0f172a;
+  padding:12px;
+  border-radius:18px;
+  background: rgba(14,165,233,.16);
+  border:1px solid rgba(14,165,233,.28);
+  color:rgba(15,23,42,.95);
   font-weight:900;
 }
 
-/* responsive */
-@media (max-width: 820px){
-  .body{grid-template-columns:1fr}
-  .sidebar{border-right:none;border-bottom:1px solid rgba(15,23,42,.08)}
-  .result{max-height: 360px}
+@media (max-width: 860px){
+  .form-container{height:auto}
+  .body{grid-template-columns:1fr; height:auto}
+  .sidebar{border-right:none;border-bottom:1px solid rgba(255,255,255,.30)}
+  .result{height:360px}
 }
 </style>
 </head>
@@ -236,8 +271,8 @@ button.secondary{background: #16a34a}
     <!-- LEFT -->
     <div class="sidebar">
       <div class="tabs">
-        <div class="tab active" onclick="showTab('cep')">CEP</div>
-        <div class="tab" onclick="showTab('logradouro')">RUA</div>
+        <div id="tabCep" class="tab active" onclick="showTab('cep')">CEP</div>
+        <div id="tabRua" class="tab" onclick="showTab('logradouro')">RUA</div>
       </div>
 
       <!-- CEP -->
@@ -260,10 +295,10 @@ button.secondary{background: #16a34a}
           <label for="cidadeInput">CIDADE</label>
           <input id="cidadeInput" value="João Pessoa" placeholder="Cidade" onfocus="this.select()">
 
-          <label for="logradouroInput" style="margin-top:10px">RUA / LOGRADOURO</label>
-          <input id="logradouroInput" placeholder="Ex.: Epitácio Pessoa" onfocus="this.select()">
+          <label for="logradouroInput" style="margin-top:12px">RUA / LOGRADOURO</label>
+          <input id="logradouroInput" placeholder="Ex.: Elias Cavalcante" onfocus="this.select()">
 
-          <div class="hint">Pode digitar só parte do nome. Sem CEP também funciona.</div>
+          <div class="hint">Pode digitar só parte do nome. Se CEP estiver ilegível, pesquise pela rua.</div>
 
           <div class="btns">
             <button class="primary" onclick="buscarLogradouro()">BUSCAR</button>
@@ -285,12 +320,40 @@ button.secondary{background: #16a34a}
 <script>
 const UF = 'PB';
 
-/* ==========================
-   UTILITÁRIOS (robustos)
-========================== */
+/* =========================================================
+   CEP GERAL (fallback por município)
+========================================================= */
+const CEP_GERAL_MUNICIPIO = {
+  "JOAO PESSOA": "58000-000",
+  "SANTA RITA": "58300-000",
+  "BAYEUX": "58305-000",
+  "CABEDELO": "58100-000",
+  "CAMPINA GRANDE": "58400-000"
+};
 
+function removerAcentos(s=''){
+  return s.normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+}
+
+function chaveCidade(s=''){
+  return removerAcentos(s).trim().toUpperCase();
+}
+
+function cepGeralDaCidade(nomeCidade){
+  const chave = chaveCidade(nomeCidade);
+  return CEP_GERAL_MUNICIPIO[chave] || "58000-000";
+}
+
+function resolverCep(i){
+  if(i?.cep && String(i.cep).trim()) return String(i.cep).toUpperCase();
+  return cepGeralDaCidade(i?.localidade || '');
+}
+
+/* =========================================================
+   UTILITÁRIOS ROBUSTOS
+========================================================= */
 async function fetchJson(url, timeoutMs = 8000, retries = 1){
-  for(let attempt = 0; attempt <= retries; attempt++){
+  for(let attempt=0; attempt<=retries; attempt++){
     const controller = new AbortController();
     const timer = setTimeout(()=>controller.abort(), timeoutMs);
 
@@ -318,37 +381,40 @@ function escapeHtml(str=''){
 
 function formatCep(c){ return c.replace(/^(\d{5})(\d{3})$/,'$1-$2'); }
 
-function removerAcentos(s=''){
-  return s.normalize('NFD').replace(/[\u0300-\u036f]/g,'');
-}
-
 function normalizarLogradouro(s=''){
-  s = s.trim().replace(/\s+/g,' ');
+  s = (s || '').trim().replace(/\s+/g,' ');
   s = s.replace(/\./g,'');
   s = s.replace(/^(Rua|R|Avenida|Av|Travessa|Trav|Alameda|Al|Praça|Pç)\s+/i,'');
   return removerAcentos(s);
 }
 
-/* ==========================
-   Tabs
-========================== */
-
+/* =========================================================
+   TABS
+========================================================= */
 function showTab(id){
   document.querySelectorAll('.tab,.tab-content').forEach(e=>e.classList.remove('active'));
-  document.querySelector(`[onclick="showTab('${id}')"]`).classList.add('active');
   document.getElementById(id).classList.add('active');
 
-  // alterna painel de resultados
-  const cepR = document.getElementById('cepResult');
-  const logR = document.getElementById('logradouroResult');
-  if(id === 'cep'){ cepR.style.display = ''; logR.style.display = 'none'; }
-  else{ cepR.style.display = 'none'; logR.style.display = ''; }
+  if(id === 'cep'){
+    tabCep.classList.add('active');
+    tabRua.classList.remove('active');
+    cepResult.style.display = '';
+    logradouroResult.style.display = 'none';
+    cepInput.focus();
+    cepInput.select();
+  }else{
+    tabRua.classList.add('active');
+    tabCep.classList.remove('active');
+    cepResult.style.display = 'none';
+    logradouroResult.style.display = '';
+    logradouroInput.focus();
+    logradouroInput.select();
+  }
 }
 
-/* ==========================
-   LOGRADOURO / BAIRRO
-========================== */
-
+/* =========================================================
+   ENDEREÇO
+========================================================= */
 function detectarTipoLogradouro(logradouro){
   const tipos = {
     'AVENIDA': /^(Avenida|Av\.?)\s*/i,
@@ -369,26 +435,19 @@ function detectarTipoLogradouro(logradouro){
     return { tipo: matchEspecial[1].toUpperCase(), nome: matchEspecial[2].trim() };
   }
 
-  return { tipo: 'RUA', nome: logradouro.trim() };
+  return { tipo:'RUA', nome: (logradouro || '').trim() };
 }
 
 function ajustarBairro(bairroApi, logradouro){
   if(bairroApi && bairroApi.trim()) return bairroApi;
-  if(/^(Sítio|Sitio|Assentamento|Engenho)/i.test(logradouro)){
-    return 'ZONA RURAL';
-  }
+  if(/^(Sítio|Sitio|Assentamento|Engenho)/i.test(logradouro)) return 'ZONA RURAL';
   return 'CENTRO';
 }
 
-/* ==========================
-   FORMATO EXATO PARA CÓPIA
-   - sequência fixa
-   - MAIÚSCULAS
-   - Arial Narrow 9,5
-========================== */
-
+/* =========================================================
+   CÓPIA EXATA (Arial Narrow 9,5 + maiúsculas)
+========================================================= */
 function buildTextoCopia({tipo, nome, bairro, cidade, cep}){
-  // sequência definida por você (ajuste se quiser outra ordem)
   const linhas = [
     `${tipo}: ${nome}`,
     `BAIRRO: ${bairro}`,
@@ -399,16 +458,14 @@ function buildTextoCopia({tipo, nome, bairro, cidade, cep}){
 }
 
 function buildHtmlCopia(textoMaiusculo){
-  // HTML rico p/ colar com fonte Arial Narrow e tamanho 9,5
   const textoHtml = escapeHtml(textoMaiusculo).replaceAll('\n','<br>');
   return `
-    <div style="font-family:'Arial Narrow', Arial, sans-serif; font-size:9.5pt; line-height:1.25; letter-spacing:.2px; text-transform:uppercase;">
+    <div style="font-family:'Arial Narrow', Arial, sans-serif; font-size:9.5pt; line-height:1.25; text-transform:uppercase;">
       ${textoHtml}
     </div>
   `;
 }
 
-// copia com formatação (HTML + texto)
 async function copiarFormatado(textoMaiusculo){
   try{
     if(navigator.clipboard && navigator.clipboard.write){
@@ -421,7 +478,6 @@ async function copiarFormatado(textoMaiusculo){
       return true;
     }
   }catch(e){}
-  // fallback texto puro
   try{
     await navigator.clipboard.writeText(textoMaiusculo);
     return true;
@@ -429,10 +485,15 @@ async function copiarFormatado(textoMaiusculo){
   return false;
 }
 
-/* ==========================
-   RENDER ENDEREÇO
-========================== */
+async function copiarEnderecoFormatado(texto){
+  await copiarFormatado(texto);
+  const campo = document.querySelector('.tab-content.active input:last-of-type');
+  if(campo){ campo.focus(); campo.select(); }
+}
 
+/* =========================================================
+   RENDER CARD
+========================================================= */
 function buildEndereco({logradouroOriginal,bairro,cidade,cep, aviso='' }){
   logradouroOriginal = (logradouroOriginal && logradouroOriginal.trim())
     ? logradouroOriginal.trim()
@@ -440,25 +501,22 @@ function buildEndereco({logradouroOriginal,bairro,cidade,cep, aviso='' }){
 
   const {tipo, nome} = detectarTipoLogradouro(logradouroOriginal);
 
-  // manter visual normal, mas tudo em maiúsculas na cópia
-  const nomeV = escapeHtml(nome);
-  const bairroV = escapeHtml(bairro);
-  const cidadeV = escapeHtml(cidade);
-  const cepV = escapeHtml(cep);
-
   const textoCopia = buildTextoCopia({
-    tipo, nome,
-    bairro, cidade, cep
+    tipo,
+    nome,
+    bairro,
+    cidade,
+    cep
   });
 
   return `
     <div class="endereco">
       ${aviso ? `<div class="notice">${aviso}</div>` : ''}
 
-      <div><span class="label-bold">${tipo}:</span> ${nomeV}</div>
-      <div><span class="label-bold">BAIRRO:</span> ${bairroV}</div>
-      <div><span class="label-bold">CIDADE:</span> ${cidadeV}</div>
-      <div><span class="label-bold">CEP:</span> ${cepV}</div>
+      <div><span class="label-bold">${escapeHtml(tipo)}:</span> ${escapeHtml(nome)}</div>
+      <div><span class="label-bold">BAIRRO:</span> ${escapeHtml(bairro)}</div>
+      <div><span class="label-bold">CIDADE:</span> ${escapeHtml(cidade)}</div>
+      <div><span class="label-bold">CEP:</span> ${escapeHtml(cep)}</div>
 
       <div class="small-actions">
         <button class="secondary" onclick="copiarEnderecoFormatado(\`${textoCopia}\`)">COPIAR ENDEREÇO</button>
@@ -468,16 +526,9 @@ function buildEndereco({logradouroOriginal,bairro,cidade,cep, aviso='' }){
   `;
 }
 
-async function copiarEnderecoFormatado(texto){
-  const ok = await copiarFormatado(texto);
-  const campo = document.querySelector('.tab-content.active input:last-of-type');
-  if(campo){ campo.focus(); campo.select(); }
-}
-
-/* ==========================
-   MÁSCARA CEP + AUTO BUSCA
-========================== */
-
+/* =========================================================
+   MÁSCARA CEP
+========================================================= */
 cepInput.setAttribute('inputmode','numeric');
 cepInput.setAttribute('maxlength','9');
 cepInput.setAttribute('autocomplete','postal-code');
@@ -499,19 +550,17 @@ cepInput.addEventListener('paste', ()=>{
   },0);
 });
 
-/* ==========================
+/* =========================================================
    BUSCA CEP
-========================== */
-
+========================================================= */
 async function buscarCep(){
   const c = cepInput.value.replace(/\D/g,'');
 
   if(c.length !== 8){
-    document.getElementById('cepResult').innerHTML = 'CEP INVÁLIDO (DIGITE 8 NÚMEROS).';
+    cepResult.innerHTML = 'CEP INVÁLIDO (DIGITE 8 NÚMEROS).';
     return;
   }
 
-  const cepResult = document.getElementById('cepResult');
   cepResult.innerHTML = '<div class="loading">BUSCANDO CEP...</div>';
 
   try{
@@ -526,10 +575,9 @@ async function buscarCep(){
       ? d.logradouro.trim()
       : 'LOGRADOURO NÃO INFORMADO';
 
-    // não limita: apenas avisa
     let aviso = '';
-    if(d.uf !== UF){
-      aviso = `⚠️ CEP ENCONTRADO ✅ MAS É DO ESTADO <b>${escapeHtml(d.uf)}</b> (FORA DE ${UF}).`;
+    if(d.uf && d.uf.toUpperCase() !== UF){
+      aviso = `⚠️ CEP ENCONTRADO ✅ MAS É DO ESTADO <b>${escapeHtml(d.uf.toUpperCase())}</b> (FORA DE ${UF}).`;
     }
 
     cepResult.innerHTML = buildEndereco({
@@ -542,23 +590,42 @@ async function buscarCep(){
 
     cepInput.focus();
     cepInput.select();
+
   }catch(e){
-    cepResult.innerHTML = 'ERRO AO CONSULTAR VIA CEP. VERIFIQUE A INTERNET E TENTE NOVAMENTE.';
+    cepResult.innerHTML = 'ERRO AO CONSULTAR VIA CEP. VERIFIQUE A INTERNET.';
   }
 }
 
-/* ==========================
-   BUSCA LOGRADOURO
-========================== */
-
+/* =========================================================
+   BUSCA LOGRADOURO (robusta)
+========================================================= */
 async function buscarLogradouro(){
-  const cidadeRaw = (cidadeInput.value || '').trim();
-  const logRaw = (logradouroInput.value || '').trim();
+  let cidadeRaw = (cidadeInput.value || '').trim();
+  let logRaw = (logradouroInput.value || '').trim();
 
-  const logradouroResult = document.getElementById('logradouroResult');
+  if(!logRaw){
+    logradouroResult.innerHTML = 'DIGITE O NOME DA RUA / LOGRADOURO.';
+    return;
+  }
 
-  if(!cidadeRaw || !logRaw){
-    logradouroResult.innerHTML = 'DIGITE A CIDADE E O LOGRADOURO.';
+  // aceita "RUA X, SANTA RITA PB"
+  logRaw = logRaw.replace(/\bPB\b/ig,'').trim();
+
+  if(logRaw.includes(',')){
+    const partes = logRaw.split(',').map(p=>p.trim()).filter(Boolean);
+    if(partes.length >= 2){
+      const possivelRua = partes[0];
+      const possivelCidade = partes.slice(1).join(' ').trim();
+      logRaw = possivelRua;
+      if(!cidadeRaw || cidadeRaw.toUpperCase() === 'JOÃO PESSOA') cidadeRaw = possivelCidade;
+    }
+  }
+
+  logRaw = logRaw.replace(/\s+/g,' ').trim();
+  cidadeRaw = cidadeRaw.replace(/\s+/g,' ').trim();
+
+  if(!cidadeRaw){
+    logradouroResult.innerHTML = 'INFORME A CIDADE.';
     return;
   }
 
@@ -592,56 +659,64 @@ async function buscarLogradouro(){
       return;
     }
 
-    // ordena: bairro preenchido primeiro
     achou.sort((a,b)=>{
       const ab = (a.bairro||'').trim().length;
       const bb = (b.bairro||'').trim().length;
       return bb - ab;
     });
 
-    // limita p/ não travar
     const lista = achou.slice(0, 30);
 
     logradouroResult.innerHTML = lista.map(i=>{
       const bruto = (i.logradouro && i.logradouro.trim()) ? i.logradouro.trim() : logRaw;
 
+      const cidade = `${(i.localidade||'').toUpperCase()}/${(i.uf||'').toUpperCase()}`;
+
       return buildEndereco({
         logradouroOriginal: bruto,
         bairro: ajustarBairro((i.bairro||'').toUpperCase(), bruto),
-        cidade: `${(i.localidade||'').toUpperCase()}/${(i.uf||'').toUpperCase()}`,
-        cep: (i.cep || '58000-000').toUpperCase()
+        cidade,
+        cep: resolverCep(i) // ✅ CEP geral se não vier
       });
-    }).join('<div class="divider"></div>');
+    }).join('<hr class="divider">');
 
     logradouroInput.focus();
     logradouroInput.select();
+
   }catch(e){
     logradouroResult.innerHTML = 'ERRO AO CONSULTAR VIA CEP. VERIFIQUE A INTERNET.';
   }
 }
 
-/* ==========================
+/* =========================================================
    LIMPAR
-========================== */
-
+========================================================= */
 function limpar(){
   cepInput.value='';
   logradouroInput.value='';
-  document.getElementById('cepResult').innerHTML='';
-  document.getElementById('logradouroResult').innerHTML='';
+  cepResult.innerHTML='';
+  logradouroResult.innerHTML='';
   document.querySelector('.form-container').scrollIntoView({behavior:'smooth'});
 
   const campo = document.querySelector('.tab-content.active input:last-of-type');
-  if(campo){ campo.focus(); campo.select(); }
+  if(campo){
+    campo.focus();
+    campo.select();
+  }
 }
 
-// Enter para buscar (tab atual)
+/* Enter para buscar no tab atual */
 document.addEventListener('keydown', (e)=>{
   if(e.key === 'Enter'){
     const tab = document.querySelector('.tab-content.active')?.id;
     if(tab === 'cep') buscarCep();
     if(tab === 'logradouro') buscarLogradouro();
   }
+});
+
+/* abre sempre no CEP */
+window.addEventListener('load', ()=>{
+  showTab('cep');
 });
 </script>
 </body>
